@@ -1,12 +1,15 @@
 package net.estemon.studio.screen.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.entity.Planet;
 import net.estemon.utils.ViewportUtils;
 import net.estemon.utils.debug.DebugCameraController;
 
@@ -41,14 +44,6 @@ public class GameRenderer implements Disposable {
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
 
-        viewport.apply();
-        renderer.setProjectionMatrix(camera.combined);
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-
-        renderer.circle(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y, 3, 30);
-
-        renderer.end();
-
         renderDebug();
     }
 
@@ -65,5 +60,24 @@ public class GameRenderer implements Disposable {
     // private methods
     private void renderDebug() {
         ViewportUtils.drawGrid(viewport, renderer, GameConfig.CELL_SIZE);
+
+        viewport.apply();
+        renderer.setProjectionMatrix(camera.combined);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+
+        drawDebug();
+
+        renderer.end();
+    }
+
+    private void drawDebug() {
+        Planet planet = controller.getPlanet();
+        Circle planetBounds = planet.getBounds();
+
+        Color oldColor = renderer.getColor();
+
+        renderer.setColor(Color.RED);
+        renderer.circle(planetBounds.x, planetBounds.y, planetBounds.radius, 60);
+        renderer.setColor(oldColor);
     }
 }
