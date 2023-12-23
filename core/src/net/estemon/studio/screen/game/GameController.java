@@ -1,5 +1,7 @@
 package net.estemon.studio.screen.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Logger;
 
 import net.estemon.studio.config.GameConfig;
@@ -17,6 +19,8 @@ public class GameController {
 
     private float playerStartX;
     private float playerStartY;
+
+    private boolean update = false;
 
     // constructor
     public GameController() {
@@ -36,7 +40,14 @@ public class GameController {
 
     // public methods
     public void update(float delta) {
-        player.update(delta);
+        if (!update) {
+            player.update(delta);
+            // update = true;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.isWalking()) {
+            player.jump();
+        }
     }
 
     public Planet getPlanet() {

@@ -90,7 +90,7 @@ public class GameRenderer implements Disposable {
                 0, 0,
                 playerBounds.width, playerBounds.height,
                 1, 1,
-                GameConfig.PLAYER_START_ANGLE - player.getAngleDeg()
+                GameConfig.PLAYER_START_ANGLE - player.getAngleDeg() - 5
         );
 
         renderer.setColor(oldColor);

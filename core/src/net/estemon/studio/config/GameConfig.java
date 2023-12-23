@@ -23,5 +23,9 @@ public class GameConfig {
     public static final float PLAYER_START_ANG_SPEED = 45f;
     public static final float PLAYER_START_ANGLE = -90f;
 
+    public static final float PLAYER_MAX_SPEED = 2f;
+    public static final float PLAYER_GRAVITY = 9.8f;
+    public static final float GAME_GRAVITY = PLAYER_GRAVITY * 2f;
+
     private GameConfig() {} // not instantiable
 }
