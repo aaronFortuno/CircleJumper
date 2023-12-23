@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Planet;
+import net.estemon.studio.entity.Player;
 import net.estemon.utils.ViewportUtils;
 import net.estemon.utils.debug.DebugCameraController;
 
@@ -71,13 +73,20 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawDebug() {
-        Planet planet = controller.getPlanet();
-        Circle planetBounds = planet.getBounds();
-
         Color oldColor = renderer.getColor();
 
+        // planet
+        Planet planet = controller.getPlanet();
+        Circle planetBounds = planet.getBounds();
         renderer.setColor(Color.RED);
         renderer.circle(planetBounds.x, planetBounds.y, planetBounds.radius, 60);
+
+        // player
+        Player player = controller.getPlayer();
+        Rectangle playerBounds = player.getBounds();
+        renderer.setColor(Color.CORAL);
+        renderer.rect(playerBounds.x, playerBounds.y, playerBounds.width, playerBounds.height);
+
         renderer.setColor(oldColor);
     }
 }
