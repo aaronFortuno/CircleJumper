@@ -1,31 +1,33 @@
 package net.estemon.studio.entity;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 
 import net.estemon.studio.config.GameConfig;
 import net.estemon.utils.entity.EntityBase;
 
-public class Coin extends EntityBase implements Pool.Poolable {
+public class Obstacle extends EntityBase implements Pool.Poolable {
 
     // attributes
     private float angleDeg;
-    private boolean offset;
+    private Rectangle sensor = new Rectangle();
+    private float sensorAngleDeg;
 
     // constructors
-    public Coin() {
-        setSize(GameConfig.COIN_SIZE, GameConfig.COIN_SIZE);
+
+    public Obstacle() {
+        setSize(GameConfig.OBSTACLE_SIZE, GameConfig.OBSTACLE_SIZE);
+
     }
 
     // public methods
     public void setAngleDeg(float value) {
         angleDeg = value % 360f;
+        sensorAngleDeg = angleDeg + 20f;
 
+        // obstacle
         float radius = GameConfig.PLANET_HALF_SIZE;
-        if (offset) {
-            radius += GameConfig.COIN_SIZE;
-        }
-
         float originX = GameConfig.WORLD_CENTER_X;
         float originY = GameConfig.WORLD_CENTER_Y;
 
@@ -33,18 +35,28 @@ public class Coin extends EntityBase implements Pool.Poolable {
         float newY = originY + MathUtils.sinDeg(-angleDeg) * radius;
 
         setPosition(newX, newY);
-    }
 
-    @Override
-    public void reset() {
-        offset = false;
+        // sensor
+        float sensorX = originX + MathUtils.cosDeg(-sensorAngleDeg) * radius;
+        float sensorY = originY + MathUtils.sinDeg(-sensorAngleDeg) * radius;
+
+        sensor.set(sensorX, sensorY, getWidth(), getHeight());
     }
 
     public float getAngleDeg() {
         return angleDeg;
     }
 
-    public void setOffset(boolean offset) {
-        this.offset = offset;
+    public float getSensorAngleDeg() {
+        return sensorAngleDeg;
+    }
+
+    public Rectangle getSensor() {
+        return sensor;
+    }
+
+    @Override
+    public void reset() {
+
     }
 }

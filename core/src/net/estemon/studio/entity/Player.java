@@ -59,6 +59,10 @@ public class Player extends EntityBase {
         return state.isWalking();
     }
 
+    public void reset() {
+        angleDeg = GameConfig.START_ANGLE;
+    }
+
     // private methods
     private void fall() {
         state = PlayerState.FALLING;
