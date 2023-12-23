@@ -8,7 +8,7 @@ import net.estemon.utils.entity.EntityBase;
 public class Player extends EntityBase {
 
     // attributes
-    private float angleDeg = GameConfig.PLAYER_START_ANGLE;
+    private float angleDeg = GameConfig.START_ANGLE;
     private float angleDegSpeed = GameConfig.PLAYER_START_ANG_SPEED;
     private float yPositionFromSurface = 0f;
     private float acceleration = GameConfig.PLAYER_GRAVITY;

@@ -2,9 +2,14 @@ package net.estemon.studio.screen.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.entity.Coin;
 import net.estemon.studio.entity.Planet;
 import net.estemon.studio.entity.Player;
 
@@ -20,7 +25,9 @@ public class GameController {
     private float playerStartX;
     private float playerStartY;
 
-    private boolean update = false;
+    private final Array<Coin> coins = new Array<Coin>();
+    private final Pool<Coin> coinPool = Pools.get(Coin.class, 10);
+    private float coinTimer;
 
     // constructor
     public GameController() {
@@ -40,14 +47,12 @@ public class GameController {
 
     // public methods
     public void update(float delta) {
-        if (!update) {
-            player.update(delta);
-            // update = true;
-        }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.isWalking()) {
             player.jump();
         }
+
+        player.update(delta);
+        spawnCoins(delta);
     }
 
     public Planet getPlanet() {
@@ -56,5 +61,27 @@ public class GameController {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Array<Coin> getCoins() {
+        return coins;
+    }
+
+    // private methods
+    private void spawnCoins(float delta) {
+        coinTimer += delta;
+
+        if (coins.size >= GameConfig.MAX_COINS) {
+            coinTimer = 0f;
+            return;
+        }
+
+        if (coinTimer >= GameConfig.COIN_SPAWN_TIME) {
+            coinTimer = 0f;
+            Coin coin = coinPool.obtain();
+            float randomAngle = MathUtils.random(360);
+            coin.setAngleDeg(randomAngle);
+            coins.add(coin);
+        }
     }
 }

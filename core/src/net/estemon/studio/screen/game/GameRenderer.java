@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.config.GameConfig;
+import net.estemon.studio.entity.Coin;
 import net.estemon.studio.entity.Planet;
 import net.estemon.studio.entity.Player;
 import net.estemon.utils.ViewportUtils;
@@ -90,8 +91,21 @@ public class GameRenderer implements Disposable {
                 0, 0,
                 playerBounds.width, playerBounds.height,
                 1, 1,
-                GameConfig.PLAYER_START_ANGLE - player.getAngleDeg() - 5
+                GameConfig.START_ANGLE - player.getAngleDeg() - GameConfig.ANGLE_ADJUSTER
         );
+
+        // coins
+        renderer.setColor(Color.YELLOW);
+        for (Coin coin : controller.getCoins()) {
+            Rectangle coinBounds = coin.getBounds();
+            renderer.rect(
+                    coinBounds.x, coinBounds.y,
+                    0, 0,
+                    coinBounds.width, coinBounds.height,
+                    1, 1,
+                    GameConfig.START_ANGLE - coin.getAngleDeg() - GameConfig.ANGLE_ADJUSTER
+            );
+        }
 
         renderer.setColor(oldColor);
     }
