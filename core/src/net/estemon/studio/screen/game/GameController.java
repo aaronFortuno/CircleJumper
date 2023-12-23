@@ -36,7 +36,7 @@ public class GameController {
 
     // public methods
     public void update(float delta) {
-
+        player.update(delta);
     }
 
     public Planet getPlanet() {

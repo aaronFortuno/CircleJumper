@@ -85,7 +85,13 @@ public class GameRenderer implements Disposable {
         Player player = controller.getPlayer();
         Rectangle playerBounds = player.getBounds();
         renderer.setColor(Color.CORAL);
-        renderer.rect(playerBounds.x, playerBounds.y, playerBounds.width, playerBounds.height);
+        renderer.rect(
+                playerBounds.x, playerBounds.y,
+                0, 0,
+                playerBounds.width, playerBounds.height,
+                1, 1,
+                GameConfig.PLAYER_START_ANGLE - player.getAngleDeg()
+        );
 
         renderer.setColor(oldColor);
     }

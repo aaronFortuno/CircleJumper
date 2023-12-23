@@ -20,6 +20,8 @@ public class GameConfig {
     public static final float PLAYER_SIZE = 1f;
     public static final float PLAYER_HALF_SIZE = PLAYER_SIZE / 2f;
 
+    public static final float PLAYER_START_ANG_SPEED = 45f;
+    public static final float PLAYER_START_ANGLE = -90f;
 
     private GameConfig() {} // not instantiable
 }
