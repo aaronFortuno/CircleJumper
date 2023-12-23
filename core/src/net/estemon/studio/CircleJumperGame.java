@@ -1,14 +1,11 @@
 package net.estemon.studio;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 import net.estemon.studio.screen.game.GameScreen;
 

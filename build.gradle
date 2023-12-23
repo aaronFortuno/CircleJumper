@@ -80,10 +80,8 @@ project(":gdx-utils") {
 project(":core") {
     apply plugin: "java-library"
 
-
     dependencies {
         implementation project(":gdx-utils")
-
     }
 }
 

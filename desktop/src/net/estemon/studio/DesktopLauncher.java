@@ -2,7 +2,6 @@ package net.estemon.studio;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import net.estemon.studio.CircleJumperGame;
 import net.estemon.studio.config.GameConfig;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
