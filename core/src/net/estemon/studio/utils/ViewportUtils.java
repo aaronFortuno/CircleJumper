@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import net.estemon.studio.config.GameConfig;
+// import net.estemon.studio.config.GameConfig;
 
 public class ViewportUtils {
     private ViewportUtils() {} // not instantiable
@@ -64,7 +64,7 @@ public class ViewportUtils {
 
         // Draw MAX_Y line
         renderer.setColor(Color.CORAL);
-        renderer.line(0, GameConfig.MAX_Y, worldWidth, GameConfig.MAX_Y);
+        // renderer.line(0, GameConfig.MAX_Y, worldWidth, GameConfig.MAX_Y);
 
         renderer.end();
 
