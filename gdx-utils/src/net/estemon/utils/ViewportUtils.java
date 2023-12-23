@@ -1,4 +1,4 @@
-package net.estemon.studio.utils;
+package net.estemon.utils;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -40,7 +40,7 @@ public class ViewportUtils {
 
         renderer.setProjectionMatrix(viewport.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.setColor(Color.WHITE);
+        renderer.setColor(Color.DARK_GRAY);
 
         // Draw vertical lines
         for (int x = -doubleWorldWidth; x < doubleWorldWidth; x += cellSize) {
@@ -61,10 +61,6 @@ public class ViewportUtils {
         renderer.setColor(Color.GREEN);
         renderer.line(0, worldHeight, worldWidth, worldHeight); // horizontal
         renderer.line(worldWidth, 0, worldWidth, worldHeight);
-
-        // Draw MAX_Y line
-        renderer.setColor(Color.CORAL);
-        // renderer.line(0, GameConfig.MAX_Y, worldWidth, GameConfig.MAX_Y);
 
         renderer.end();
 

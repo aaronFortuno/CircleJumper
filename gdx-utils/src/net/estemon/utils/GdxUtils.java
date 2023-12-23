@@ -1,4 +1,4 @@
-package net.estemon.studio.utils;
+package net.estemon.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
