@@ -234,6 +234,7 @@ public class GameController {
         player.reset();
         player.setPosition(playerStartX, playerStartY);
 
+        GameManager.INSTANCE.updateHighScore();
         GameManager.INSTANCE.reset();
         startWaitTimer = GameConfig.START_WAIT_TIME;
     }

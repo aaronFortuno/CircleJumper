@@ -1,9 +1,15 @@
 package net.estemon.studio.common;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
+import net.estemon.studio.CircleJumperGame;
+
 public class GameManager {
 
     // constants
     public static final GameManager INSTANCE = new GameManager();
+    private static final String HIGH_SCORE_KEY = "highScore";
 
     // attributes
     private int score;
@@ -11,12 +17,27 @@ public class GameManager {
     private int highScore;
     private int displayHighScore;
 
+    private final Preferences PREFS;
+
+
     // constructors
     private GameManager() {
-
+        PREFS = Gdx.app.getPreferences(CircleJumperGame.class.getSimpleName());
+        highScore = PREFS.getInteger(HIGH_SCORE_KEY, 0);
+        displayHighScore = highScore;
     }
 
     // public methods
+    public void updateHighScore() {
+        if (score < highScore) {
+            return;
+        }
+
+        highScore = score;
+        PREFS.putInteger(HIGH_SCORE_KEY, highScore);
+        PREFS.flush();
+    }
+
     public int getDisplayScore() {
         return displayScore;
     }
