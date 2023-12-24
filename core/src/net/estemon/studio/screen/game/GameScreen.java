@@ -2,8 +2,11 @@ package net.estemon.studio.screen.game;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 
 import net.estemon.studio.CircleJumperGame;
+import net.estemon.studio.assets.AssetDescriptors;
+import net.estemon.studio.common.SoundListener;
 import net.estemon.utils.GdxUtils;
 
 public class GameScreen extends ScreenAdapter {
@@ -11,20 +14,45 @@ public class GameScreen extends ScreenAdapter {
     // attributes
     private final CircleJumperGame game;
     private final AssetManager assetManager;
+    private final SoundListener listener;
 
     private GameController controller;
     private GameRenderer renderer;
+
+    private Sound coinSound;
+    private Sound jumpSound;
+    private Sound loseSound;
 
     // constructors
     public GameScreen(CircleJumperGame game) {
         this.game = game;
         assetManager = game.getAssetManager();
+        listener = new SoundListener() {
+            @Override
+            public void hitCoin() {
+                coinSound.play();
+            }
+
+            @Override
+            public void jump() {
+                jumpSound.play();
+            }
+
+            @Override
+            public void lose() {
+                loseSound.play();
+            }
+        };
     }
 
     // public methods
     @Override
     public void show() {
-        controller = new GameController();
+        coinSound = assetManager.get(AssetDescriptors.COIN_SOUND);
+        jumpSound = assetManager.get(AssetDescriptors.JUMP_SOUND);
+        loseSound = assetManager.get(AssetDescriptors.LOSE_SOUND);
+
+        controller = new GameController(listener);
         renderer = new GameRenderer(controller, game.getBatch(), assetManager);
     }
 

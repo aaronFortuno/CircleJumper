@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pools;
 
 import net.estemon.studio.common.GameManager;
 import net.estemon.studio.common.GameState;
+import net.estemon.studio.common.SoundListener;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Coin;
 import net.estemon.studio.entity.Obstacle;
@@ -25,6 +26,8 @@ public class GameController {
     private static final Logger log = new Logger(GameController.class.getSimpleName(), Logger.DEBUG);
 
     // attributes
+    private final SoundListener listener;
+
     private Planet planet;
     private Player player;
 
@@ -46,7 +49,8 @@ public class GameController {
     private OverlayCallback callback;
 
     // constructor
-    public GameController() {
+    public GameController(SoundListener listener) {
+        this.listener = listener;
         init();
     }
 
@@ -93,6 +97,7 @@ public class GameController {
         GameManager.INSTANCE.updateDisplayScore(delta);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.isWalking()) {
+            listener.jump();
             player.jump();
         }
 
@@ -274,6 +279,7 @@ public class GameController {
                 GameManager.INSTANCE.addScore(GameConfig.COIN_SCORE);
                 coinPool.free(coin);
                 coins.removeValue(coin, true);
+                listener.hitCoin();
             }
         }
 
@@ -284,6 +290,7 @@ public class GameController {
                 obstaclePool.free(obstacle);
                 obstacles.removeValue(obstacle, true);
             } else if (Intersector.overlaps(player.getBounds(), obstacle.getBounds())) {
+                listener.lose();
                 gameState = GameState.GAME_OVER;
             }
         }
