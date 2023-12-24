@@ -9,8 +9,8 @@ public class AssetPacker {
 
     public static void main(String[] args) {
         TexturePacker.process(
-                RAW_ASSETS_PATH + "/gameplay",
-                FINAL_ASSETS_PATH + "/gameplay",
-                "gameplay");
+                RAW_ASSETS_PATH + "/ui",
+                FINAL_ASSETS_PATH + "/ui",
+                "skin");
     }
 }
