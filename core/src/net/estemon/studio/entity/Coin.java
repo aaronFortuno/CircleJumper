@@ -8,9 +8,13 @@ import net.estemon.utils.entity.EntityBase;
 
 public class Coin extends EntityBase implements Pool.Poolable {
 
+    // constants
+    private static final float SCALE_MAX = 1.0f;
+
     // attributes
     private float angleDeg;
     private boolean offset;
+    private float scale;
 
     // constructors
     public Coin() {
@@ -18,6 +22,16 @@ public class Coin extends EntityBase implements Pool.Poolable {
     }
 
     // public methods
+    public float getScale() {
+        return scale;
+    }
+
+    public void update(float delta) {
+        if (scale < SCALE_MAX) {
+            scale += delta;
+        }
+    }
+
     public void setAngleDeg(float value) {
         angleDeg = value % 360f;
 
@@ -38,6 +52,7 @@ public class Coin extends EntityBase implements Pool.Poolable {
     @Override
     public void reset() {
         offset = false;
+        scale = 0f;
     }
 
     public float getAngleDeg() {

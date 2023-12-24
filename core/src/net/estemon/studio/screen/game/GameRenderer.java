@@ -127,13 +127,6 @@ public class GameRenderer implements Disposable {
                 GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT
         );
 
-        // planet
-        Planet planet = controller.getPlanet();
-        batch.draw(planetRegion,
-                planet.getX() - GameConfig.PLANET_HALF_SIZE, planet.getY() - GameConfig.PLANET_HALF_SIZE,
-                planet.getWidth(), planet.getHeight()
-        );
-
         // obstacles
         Array<Obstacle> obstacles = controller.getObstacles();
         TextureRegion obstacleRegion = (TextureRegion) obstacleAnimation.getKeyFrame(controller.getAnimationTime());
@@ -147,6 +140,13 @@ public class GameRenderer implements Disposable {
             );
         }
 
+        // planet
+        Planet planet = controller.getPlanet();
+        batch.draw(planetRegion,
+                planet.getX() - GameConfig.PLANET_HALF_SIZE, planet.getY() - GameConfig.PLANET_HALF_SIZE,
+                planet.getWidth(), planet.getHeight()
+        );
+
         // coins
         Array<Coin> coins = controller.getCoins();
         TextureRegion coinRegion = (TextureRegion) coinAnimation.getKeyFrame(controller.getAnimationTime());
@@ -155,7 +155,7 @@ public class GameRenderer implements Disposable {
                     coin.getX(), coin.getY(),
                     0, 0,
                     coin.getWidth(), coin.getHeight(),
-                    1f, 1f,
+                    coin.getScale(), coin.getScale(),
                     GameConfig.START_ANGLE - coin.getAngleDeg()
             );
         }
@@ -213,7 +213,7 @@ public class GameRenderer implements Disposable {
                     coinBounds.x, coinBounds.y,
                     0, 0,
                     coinBounds.width, coinBounds.height,
-                    1, 1,
+                    coin.getScale(), coin.getScale(),
                     GameConfig.START_ANGLE - coin.getAngleDeg() - GameConfig.ANGLE_ADJUSTER
             );
         }

@@ -73,6 +73,14 @@ public class GameController {
 
         player.update(delta);
 
+        for (Obstacle obstacle : obstacles) {
+            obstacle.update(delta);
+        }
+
+        for (Coin coin : coins) {
+            coin.update(delta);
+        }
+
         spawnObstacles(delta);
         spawnCoins(delta);
 
