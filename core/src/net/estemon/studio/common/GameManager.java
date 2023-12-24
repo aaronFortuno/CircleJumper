@@ -46,6 +46,10 @@ public class GameManager {
         return displayHighScore;
     }
 
+    public int getHighScore() {
+        return highScore;
+    }
+
     public void reset() {
         score = 0;
         displayScore = 0;

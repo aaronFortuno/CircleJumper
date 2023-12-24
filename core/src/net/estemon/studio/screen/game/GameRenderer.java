@@ -1,5 +1,6 @@
 package net.estemon.studio.screen.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -20,11 +23,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.common.GameManager;
+import net.estemon.studio.common.GameState;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Coin;
 import net.estemon.studio.entity.Obstacle;
 import net.estemon.studio.entity.Planet;
 import net.estemon.studio.entity.Player;
+import net.estemon.studio.screen.menu.MenuOverlay;
 import net.estemon.utils.ViewportUtils;
 import net.estemon.utils.debug.DebugCameraController;
 
@@ -53,6 +58,9 @@ public class GameRenderer implements Disposable {
     private Animation coinAnimation;
     private Animation playerAnimation;
 
+    private Stage hudStage;
+    private MenuOverlay menuOverlay;
+
     // constructors
     public GameRenderer(GameController controller, SpriteBatch batch, AssetManager assetManager) {
         this.controller = controller;
@@ -67,7 +75,10 @@ public class GameRenderer implements Disposable {
         renderer = new ShapeRenderer();
 
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
+        hudStage = new Stage(hudViewport, batch);
+
         font = assetManager.get(AssetDescriptors.FONT);
+        Skin skin = assetManager.get(AssetDescriptors.SKIN);
 
         debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
@@ -85,7 +96,14 @@ public class GameRenderer implements Disposable {
                 Animation.PlayMode.LOOP_PINGPONG);
         playerAnimation = new Animation(0.05f,
                 gamePlayAtlas.findRegions(RegionNames.PLAYER),
-                Animation.PlayMode.LOOP_PINGPONG);;
+                Animation.PlayMode.LOOP_PINGPONG);
+
+        menuOverlay = new MenuOverlay(skin, controller.getCallback());
+
+        hudStage.addActor(menuOverlay);
+        hudStage.setDebugAll(true);
+
+        Gdx.input.setInputProcessor(hudStage);
     }
 
     // public methods
@@ -247,12 +265,28 @@ public class GameRenderer implements Disposable {
 
     private void renderHud() {
         hudViewport.apply();
-        batch.setProjectionMatrix(hudViewport.getCamera().combined);
-        batch.begin();
 
-        drawHud();
+        menuOverlay.setVisible(false);
 
-        batch.end();
+        GameState gameState = controller.getGameState();
+
+        if (gameState.isPlayingOrReady()) {
+            batch.setProjectionMatrix(hudViewport.getCamera().combined);
+            batch.begin();
+
+            drawHud();
+
+            batch.end();
+            return;
+        }
+
+        if (gameState.isMenu() && !menuOverlay.isVisible()) {
+            menuOverlay.updateLabel();
+            menuOverlay.setVisible(true);
+        }
+
+        hudStage.act();
+        hudStage.draw();
     }
 
     private void drawHud() {
