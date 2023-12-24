@@ -1,20 +1,24 @@
 package net.estemon.studio.screen.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.assets.AssetDescriptors;
+import net.estemon.studio.assets.RegionNames;
 import net.estemon.studio.common.GameManager;
 import net.estemon.studio.config.GameConfig;
 import net.estemon.studio.entity.Coin;
@@ -42,6 +46,13 @@ public class GameRenderer implements Disposable {
 
     private DebugCameraController debugCameraController;
 
+    private TextureRegion backgroundRegion;
+    private TextureRegion planetRegion;
+
+    private Animation obstacleAnimation;
+    private Animation coinAnimation;
+    private Animation playerAnimation;
+
     // constructors
     public GameRenderer(GameController controller, SpriteBatch batch, AssetManager assetManager) {
         this.controller = controller;
@@ -60,6 +71,21 @@ public class GameRenderer implements Disposable {
 
         debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
+
+        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.GAME_PLAY);
+
+        backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
+        planetRegion = gamePlayAtlas.findRegion(RegionNames.PLANET);
+
+        obstacleAnimation = new Animation(0.1f,
+                gamePlayAtlas.findRegions(RegionNames.OBSTACLE),
+                Animation.PlayMode.LOOP_PINGPONG);
+        coinAnimation = new Animation(0.2f,
+                gamePlayAtlas.findRegions(RegionNames.COIN),
+                Animation.PlayMode.LOOP_PINGPONG);
+        playerAnimation = new Animation(0.05f,
+                gamePlayAtlas.findRegions(RegionNames.PLAYER),
+                Animation.PlayMode.LOOP_PINGPONG);;
     }
 
     // public methods
@@ -67,6 +93,7 @@ public class GameRenderer implements Disposable {
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
 
+        renderGamePlay(delta);
         renderDebug();
         renderHud();
     }
@@ -83,6 +110,68 @@ public class GameRenderer implements Disposable {
     }
 
     // private methods
+    private void renderGamePlay(float delta) {
+        viewport.apply();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+
+        drawGamePlay(delta);
+
+        batch.end();
+    }
+
+    private void drawGamePlay(float delta) {
+        // background
+        batch.draw(backgroundRegion,
+                0 , 0,
+                GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT
+        );
+
+        // planet
+        Planet planet = controller.getPlanet();
+        batch.draw(planetRegion,
+                planet.getX() - GameConfig.PLANET_HALF_SIZE, planet.getY() - GameConfig.PLANET_HALF_SIZE,
+                planet.getWidth(), planet.getHeight()
+        );
+
+        // obstacles
+        Array<Obstacle> obstacles = controller.getObstacles();
+        TextureRegion obstacleRegion = (TextureRegion) obstacleAnimation.getKeyFrame(controller.getAnimationTime());
+        for (Obstacle obstacle : obstacles) {
+            batch.draw(obstacleRegion,
+                    obstacle.getX(), obstacle.getY(),
+                    0, 0,
+                    obstacle.getWidth(), obstacle.getHeight(),
+                    1f, 1f,
+                    GameConfig.START_ANGLE - obstacle.getAngleDeg()
+            );
+        }
+
+        // coins
+        Array<Coin> coins = controller.getCoins();
+        TextureRegion coinRegion = (TextureRegion) coinAnimation.getKeyFrame(controller.getAnimationTime());
+        for (Coin coin : coins) {
+            batch.draw(coinRegion,
+                    coin.getX(), coin.getY(),
+                    0, 0,
+                    coin.getWidth(), coin.getHeight(),
+                    1f, 1f,
+                    GameConfig.START_ANGLE - coin.getAngleDeg()
+            );
+        }
+
+        // player
+        Player player = controller.getPlayer();
+        TextureRegion playerRegion = (TextureRegion) playerAnimation.getKeyFrame(controller.getAnimationTime());
+        batch.draw(playerRegion,
+                player.getX(), player.getY(),
+                0, 0,
+                player.getWidth(), player.getHeight(),
+                1f, 1f,
+                GameConfig.START_ANGLE - player.getAngleDeg()
+        );
+    }
+
     private void renderDebug() {
         ViewportUtils.drawGrid(viewport, renderer, GameConfig.CELL_SIZE);
 

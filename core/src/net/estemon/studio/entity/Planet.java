@@ -18,6 +18,7 @@ public class Planet {
     // constructor
     public Planet() {
         bounds = new Circle(x, y, GameConfig.PLANET_HALF_SIZE);
+        setSize(GameConfig.PLANET_SIZE, GameConfig.PLANET_SIZE);
     }
 
     // public methods
