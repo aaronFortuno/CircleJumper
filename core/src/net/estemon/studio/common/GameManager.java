@@ -50,6 +50,10 @@ public class GameManager {
         return highScore;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void reset() {
         score = 0;
         displayScore = 0;
