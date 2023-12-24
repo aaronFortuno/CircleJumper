@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.estemon.studio.assets.AssetDescriptors;
 import net.estemon.studio.assets.RegionNames;
+import net.estemon.studio.common.FloatingScore;
 import net.estemon.studio.common.GameManager;
 import net.estemon.studio.common.GameState;
 import net.estemon.studio.config.GameConfig;
@@ -324,5 +325,17 @@ public class GameRenderer implements Disposable {
                     (GameConfig.HUD_HEIGHT + layout.height) / 2f
             );
         }
+
+        // floating score
+        Color oldColor = new Color(font.getColor());
+        for (FloatingScore floatingScore : controller.getFloatingScores()) {
+            layout.setText(font, floatingScore.getScoreString());
+            font.setColor(floatingScore.getColor());
+            font.draw(batch, layout,
+                    floatingScore.getX() - layout.width / 2f,
+                    floatingScore.getY() - layout.height / 2f
+            );
+        }
+        font.setColor(oldColor);
     }
 }
